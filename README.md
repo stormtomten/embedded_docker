@@ -8,6 +8,7 @@ Gör i stort sett vad instruktionerna (https://github.com/miwashi-edu/edu-pico-c
 
 
 **Uppdatering**
+
 Rättat ett fel i användarkonfigurationen.
 
 ## Instruktioner
@@ -18,12 +19,13 @@ cd embedded_docker/src/
 ```
 ### Skapa Docker image
 [...] är variabler ni själva får sätta. Se till att dessa inte krockar med tidigare instanser.
+
 Sätt [user] [password] och [buildname] till egna värden.
 ```bash
 docker build --build-arg USERNAME=[user] --build-arg PASSWORD=[password] -t [buildname] .
 ```
-- En/två varningar förekommer:
-    - Ej rekommenderat att ange användarnamn och lösenord som argument.
+- **Varningar förekommer:**
+    - **Ej rekommenderat** att ange användarnamn och lösenord som argument.
     - **Processor-arkitekturen** skiljer sig från din dators (basen är arm64).
 
 ### Starta Docker container
@@ -40,7 +42,8 @@ docker run -d --name [containername] --network [networkname] --hostname [hostnam
 ssh [user]@localhost -p [port]
 
 ```
-Om du får följande:
+**Om du får följande:**
+
 WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
 ```bash
 # Öppna known_host och ta bort nycklarna för localhost:[port]
