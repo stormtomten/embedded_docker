@@ -4,7 +4,7 @@ Gör i stort sett vad instruktionerna (https://github.com/miwashi-edu/edu-pico-c
 - Installerar inte Nano.
 - Tillåter inte root-inloggning.
 - Startar ssh vid uppstart.
-- Användarnamn och lösenord är hårdkodadt i imagefilen (alla containers från samma image har samma användare).
+- Användarnamn och lösenord är hårdkodat i imagefilen (alla containers från samma image har samma användare).
 
 
 **Uppdatering**
@@ -18,23 +18,24 @@ git clone "https://github.com/stormtomten/embedded_docker.git"
 cd embedded_docker/src/
 ```
 ### Skapa Docker image
-[...] är variabler ni själva får sätta. Se till att dessa inte krockar med tidigare instanser.
+Ersätt **[user]**, **[password]** och **[buildname]** med egna värden.
 
-Sätt [user] [password] och [buildname] till egna värden.
 ```bash
 docker build --build-arg USERNAME=[user] --build-arg PASSWORD=[password] -t [buildname] .
 ```
-- **Varningar förekommer:**
-    - **Ej rekommenderat** att ange användarnamn och lösenord som argument.
-    - **Processor-arkitekturen** skiljer sig från din dators (basen är arm64).
+**Möjliga Varningar.**
+
+- **Ej rekommenderat** att ange användarnamn och lösenord som argument.
+- **Processor-arkitekturen** (arm64) skiljer sig från din dators.
 
 ### Starta Docker container
+Ersätt **[containername]**, **[hostname]** och **[port]** med egna värden, se till att dessa inte krockar med tidigare instanser.
+
+Använd ett befintligt nätverk i **[networkname]** (ni har troligtvis ```iotnet``` sedan tidigare).
 
 ```bash
 docker run -d --name [containername] --network [networkname] --hostname [hostname] -p [port]:22 -e TZ=UTC [buildname]
 ```
-# Ni har nog ett iotnet sedan tidigare använd det i [networkname]
-- [networkname] - Använd ett befintligt (iotnet om det är konfigurerat).
 - -e TZ=UTC - Sätter tidszonen till UTC för containern
 
 ### Login
@@ -44,9 +45,12 @@ ssh [user]@localhost -p [port]
 ```
 **Om du får följande:**
 
-WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+```WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!```
+
+Ta bort de gamla SSH-nycklarna:
+
 ```bash
 # Öppna known_host och ta bort nycklarna för localhost:[port]
 vi ~/.ssh/known_hosts
-# Sök efter raden/raderna me 'localhost:[port]' och radera den/dem.
+# Sök efter raderna med 'localhost:[port]' och radera dem.
 ```
