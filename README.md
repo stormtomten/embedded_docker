@@ -35,5 +35,5 @@ ssh [user]@localhost -p [port]
 
 # if WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
 # vi ~/.ssh/known_hosts
-# remove key for localhost:2222
+# remove key for localhost:[port]
 ```
