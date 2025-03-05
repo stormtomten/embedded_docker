@@ -1,7 +1,9 @@
 #!/bin/bash
-# Start the SSH service
-service ssh start
+set -e
 
-# Keep the container running
-exec "$@"
+# Ensure SSH directory exists
+mkdir -p /var/run/sshd
+
+# Start SSHD in the foreground
+exec /usr/sbin/sshd -D
 
