@@ -1,0 +1,40 @@
+# Base image (balenalib raspberry debian bookworm)
+FROM balenalib/raspberrypi5-debian:bookworm
+
+# Install pakages
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    openssh-server \
+    sudo \
+    vim \
+    gdb \
+    git 
+    
+# Create the SSH run directory
+RUN mkdir /var/run/sshd
+
+# Configure SSH settings (password but no root)
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+
+# Create user and set password using arguments during build
+ARG USERNAME=username
+ARG PASSWORD=password
+RUN useradd -m -s /bin/bash devy && \
+    echo "${USERNAME}:${PASSWORD}" | chpasswd && \
+    usermod -aG sudo ${USERNAME}
+
+# Expose SSH port
+EXPOSE 22
+
+# Copy en set entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Keep the container running indefinetly
+CMD ["tail", "-f", "/dev/null"]
