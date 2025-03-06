@@ -18,10 +18,10 @@ git clone "https://github.com/stormtomten/embedded_docker.git"
 cd embedded_docker/src/
 ```
 ### Skapa Docker image
-Ersätt **[user]**, **[password]** och **[buildname]** med egna värden.
+Ersätt **[user]**, **[password]** och **[imagename]** med egna värden.
 
 ```bash
-docker build --build-arg USERNAME=[user] --build-arg PASSWORD=[password] -t [buildname] .
+docker build --build-arg USERNAME=[user] --build-arg PASSWORD=[password] -t [imagename] .
 ```
 **Möjliga Varningar.**
 
@@ -34,7 +34,7 @@ Ersätt **[containername]**, **[hostname]** och **[port]** med egna värden, se 
 Använd ett befintligt nätverk i **[networkname]** (ni har troligtvis ```iotnet``` sedan tidigare).
 
 ```bash
-docker run -d --name [containername] --network [networkname] --hostname [hostname] -p [port]:22 -e TZ=UTC [buildname]
+docker run -d --name [containername] --network [networkname] --hostname [hostname] -p [port]:22 -e TZ=UTC [imagename]
 ```
 - -e TZ=UTC - Sätter tidszonen till UTC för containern
 
