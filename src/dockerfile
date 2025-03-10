@@ -45,9 +45,9 @@ RUN useradd -m -s /bin/bash ${USERNAME} && \
     usermod -aG sudo ${USERNAME}
 
 # Create ws directory and .vimrc in the user's home directory
-RUN mkdir -p /home/${USERNAME}/ws && chown ${USERNAME}:${USERNAME} /home/${USERNAME}/ws && \
-    echo 'set nocompatible' >> /home/${USERNAME}/.vimrc && \
-    chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.vimrc
+run mkdir -p /home/${username}/ws && chown ${username}:${username} /home/${username}/ws && \
+    echo -e 'set nocompatible\nsyntax on\nfiletype plugin indent on' >> /home/${username}/.vimrc && \
+    chown ${username}:${username} /home/${username}/.vimrc
 
 
 # Expose SSH port
