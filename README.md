@@ -103,6 +103,8 @@ ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ed25519 -N ""
 cat ~/.ssh/id_ed25519.pub
 ```
 
+Lägg till nyckeln [här](https://github.com/settings/keys).
+
 **Testa GitHub login.**
 ```sh
 ssh -T git@github.com
