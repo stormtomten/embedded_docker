@@ -29,6 +29,10 @@ docker build --build-arg USERNAME=[user] --build-arg PASSWORD=[password] -t [ima
 Ersätt **[containername]**, **[hostname]** och **[port]** med egna värden, se till att dessa inte krockar med tidigare instanser.
 
 Använd ett befintligt nätverk i **[networkname]** (ni har troligtvis ```iotnet``` sedan tidigare).
+```sh
+docker network create --driver bridge --subnet 192.168.2.0/24 --gateway 192.168.2.1 iotnet
+```
+
 
 ```sh
 docker run -d --name [containername] --network [networkname] --hostname [hostname] -p [port]:22 -e TZ=UTC [imagename]
