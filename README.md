@@ -64,7 +64,7 @@ git config --global init.defaulBranch main
 ```
 2. **Ställ in användarnamn:**
 ```sh
-git config --global user.name "Your Name" # Ej nödvändig
+git config --global user.name "Your Name"
 ```
 Som email kan man använda en [GitHub noreply-mail](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address#about-no-reply-email)
 
