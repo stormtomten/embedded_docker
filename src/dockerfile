@@ -3,13 +3,31 @@ FROM balenalib/raspberrypi5-debian:bookworm
 
 # Install pakages
 RUN apt-get update && apt-get install -y \
+    locales \
     build-essential \
     cmake \
+    gcc-arm-none-eabi \
+    libnewlib-arm-none-eabi \
+    gdb-multiarch \
     openssh-server \
     sudo \
     vim \
+    nano \
     gdb \
     git 
+
+# Generate and set Swedish locale
+RUN echo "sv_SE.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen sv_SE.UTF-8 && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=sv_SE.UTF-8 LC_ALL=sv_SE.UTF-8
+
+# Set environment variables
+ENV LANG=sv_SE.UTF-8
+ENV LC_ALL=sv_SE.UTF-8
+
+# Verify locale is set
+RUN locale
     
 # Create the SSH run directory
 RUN mkdir /var/run/sshd
@@ -25,6 +43,12 @@ ARG PASSWORD=password
 RUN useradd -m -s /bin/bash ${USERNAME} && \
     echo "${USERNAME}:${PASSWORD}" | chpasswd && \
     usermod -aG sudo ${USERNAME}
+
+# Create ws directory and .vimrc in the user's home directory
+RUN mkdir -p /home/${USERNAME}/ws && chown ${USERNAME}:${USERNAME} /home/${USERNAME}/ws && \
+    echo 'set nocompatible' >> /home/${USERNAME}/.vimrc && \
+    chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.vimrc
+
 
 # Expose SSH port
 EXPOSE 22
