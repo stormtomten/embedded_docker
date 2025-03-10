@@ -75,13 +75,13 @@ curl -s https://api.github.com/users/[username] | grep -E '"id"|"login"'
 Ger dig:
 ```json
   "login": "[username]",
-  "id": [userid],
+  "id": [id],
 ```
 
 ```sh
 git config --global user.email "your.email@example.com"
 # Eller
-git config --global user.email "[userid]+[username]@users.noreply.github.com"
+git config --global user.email "[id]+[username]@users.noreply.github.com"
 
 ```
 4. **Konfigurera GitHub-användare:**
