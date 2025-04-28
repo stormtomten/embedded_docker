@@ -10,10 +10,10 @@ name: Hadolint
 
 on:
   push:
-    branches: [ $default-branch, $protected-branches ]
+    branches: [ main, develop]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ $default-branch ]
+    branches: [ main ]
     schedule:
     - cron: '*/5 * * * *'
 
