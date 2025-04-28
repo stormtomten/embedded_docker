@@ -82,18 +82,17 @@ RUN useradd -m -s /bin/bash "${USERNAME}" && \
 
 # Create ws directory and setup for pico-sdk path plus .vimrc in the user's home directory
 WORKDIR /home/${USERNAME}
-RUN su - ${USERNAME} -c "mkdir -p /home/${USERNAME}/ws /home/${USERNAME}/share && \
-    printf 'set nocompatible\nsyntax on\nfiletype plugin indent on\n' >> ~/.vimrc && \
-    echo 'export PICO_SDK_PATH=/opt/pico-sdk\n' >> ~/.bashrc &&\
-    if [ \"${ZSH}\" = \"y\" ]; then \
-        export HOME=~ &&\
+RUN su - ${USERNAME} -c 'mkdir -p /home/${USERNAME}/ws /home/${USERNAME}/share && \
+    printf "set nocompatible\nsyntax on\nfiletype plugin indent on\n" >> ~/.vimrc && \
+    echo "export PICO_SDK_PATH=/opt/pico-sdk\n" >> ~/.bashrc &&\
+    if [ "${ZSH}" = "y" ]; then \
         curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o install.sh && \
         bash install.sh --unattended && \
         rm install.sh && \
-        echo 'export PICO_SDK_PATH=/opt/pico-sdk\n' >> ~/.zshrc;\
+        echo "export PICO_SDK_PATH=/opt/pico-sdk\n" >> ~/.zshrc; \
     else \
-        echo 'Skipping oh-my-zsh'; \
-    fi"
+        echo "Skipping oh-my-zsh"; \
+    fi'
 
 # Expose SSH port
 EXPOSE 22
