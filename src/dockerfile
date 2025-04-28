@@ -71,8 +71,8 @@ RUN cmake .. -DPICO_SDK_PATH=/opt/pico-sdk &&\
     make && make install
 
 # Create user and set password using arguments during build
-ARG USERNAME=devy
-ARG PASSWORD=develop
+ARG USERNAME=user
+ARG PASSWORD=pass
 RUN useradd -m -s /bin/bash "${USERNAME}" && \
     echo "${USERNAME}:${PASSWORD}" | chpasswd && \
     usermod -aG sudo "${USERNAME}" && \
