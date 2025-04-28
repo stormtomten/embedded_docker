@@ -85,7 +85,7 @@ jobs:
 
       - name: Test SSH connection
         run: |
-          sshpass -p "pass" ssh -t -o StrictHostKeyChecking=no user@localhost -p 2222 << EOF
+          sshpass -p "pass" ssh -tt -o StrictHostKeyChecking=no user@localhost -p 2222 << EOF
           echo "Connected over SSH!"
           picotool --help || (echo "picotool not available" && exit 1)
           EOF
