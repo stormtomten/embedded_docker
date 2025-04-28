@@ -41,7 +41,7 @@ jobs:
           no-fail: true
 
       - name: Upload SARIF file as artifact
-        uses: actions/upload-artifact@4
+        uses: actions/upload-artifact@v4
         with:
           name: hadolint-results
           path: hadolint-results.sarif
