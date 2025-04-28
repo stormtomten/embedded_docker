@@ -14,8 +14,8 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ main ]
-    schedule:
-    - cron: '*/60 * * * *'
+    # schedule:
+    #- cron: '*/60 * * * *'
 
 permissions:
   contents: read
@@ -62,7 +62,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Build Docker image
-        run: docker buildx build --platform linux/arm/v7 --build-arg ZSH=y -t rpi5 ./src
+        run: docker buildx build --platform linux/arm/v7 --build-arg ZSH=y -t rpi5 --load ./src
 
       # Run Docker container
       - name: Run Docker container
@@ -103,4 +103,8 @@ jobs:
           fi
           EOF
 
-            
+      # Cleanup
+      - name: Stop and remove the container
+        run: |
+          docker stop test-container
+          docker rm test-container
