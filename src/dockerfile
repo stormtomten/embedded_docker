@@ -87,7 +87,9 @@ RUN su - ${USERNAME} -c "mkdir -p /home/${USERNAME}/ws /home/${USERNAME}/share &
     echo 'export PICO_SDK_PATH=/opt/pico-sdk\n' >> ~/.bashrc &&\
     if [ \"${ZSH}\" = \"y\" ]; then \
         export HOME=~ &&\
-        curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash -s -- --unattended && \
+        curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o install.sh && \
+        bash install.sh --unattended && \
+        rm install.sh && \
         echo 'export PICO_SDK_PATH=/opt/pico-sdk\n' >> ~/.zshrc;\
     else \
         echo 'Skipping oh-my-zsh'; \
@@ -95,6 +97,10 @@ RUN su - ${USERNAME} -c "mkdir -p /home/${USERNAME}/ws /home/${USERNAME}/share &
 
 # Expose SSH port
 EXPOSE 22
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:22 || exit 1
 
 # Copy en set entrypoint script
 COPY entrypoint.sh /entrypoint.sh
