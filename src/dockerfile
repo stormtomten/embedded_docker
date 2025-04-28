@@ -79,7 +79,11 @@ RUN useradd -m -s /bin/bash "${USERNAME}" && \
     echo "${USERNAME}:${PASSWORD}" | chpasswd && \
     usermod -aG sudo "${USERNAME}" && \
     if [ "$ZSH" = "y" ]; then \
-        usermod -s "$(which zsh)" "${USERNAME}"; \
+        if command -v zsh >/dev/null 2>&1; then \
+         usermod -s "$(command -v zsh)" "${USERNAME}"; \
+        else \
+            echo "Warning: zsh is not installed correctly!" && exit 1; \
+        fi \
     fi
 
 # Create ws directory and setup for pico-sdk path plus .vimrc in the user's home directory
@@ -115,4 +119,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 # Keep the container running indefinetly
 # CMD ["tail", "-f", "/dev/null"]
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D", "-e", "-ddd"]

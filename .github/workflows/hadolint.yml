@@ -85,10 +85,23 @@ jobs:
 
       - name: Test SSH connection
         run: |
-          sshpass -p "pass" ssh -tt -o StrictHostKeyChecking=no user@localhost -p 2222 << EOF
+          set -e
+          if sshpass -p "pass" ssh -tt -o StrictHostKeyChecking=no user@localhost -p 2222 << EOF
           echo "Connected over SSH!"
           picotool --help || (echo "picotool not available" && exit 1)
           EOF
+          then
+            echo "SSH test passed!"
+          else
+            echo "SSH test failed!"
+            exit 1
+          fi
+
+      - name: Dump container logs on failure
+        if: failure() && steps.ssh_test.outcome == 'failure'
+        run: |
+          echo "=== SSH server logs from container ==="
+          docker logs rpi5-test || echo "Could not fetch logs!"
 
 
       - name: Verify oh-my-zsh installation
