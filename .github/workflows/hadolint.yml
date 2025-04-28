@@ -85,7 +85,7 @@ jobs:
 
       - name: Test SSH connection
         run: |
-          sshpass -p "pass" ssh .o StrictHostKeyChecking=no user@localhost -p 2222 << EOF
+          sshpass -p "pass" ssh -o StrictHostKeyChecking=no user@localhost -p 2222 << EOF
           echo "Connected over SSH!"
           picotool --help || (echo "picotool not available" && exit 1)
           EOF
@@ -106,5 +106,5 @@ jobs:
       # Cleanup
       - name: Stop and remove the container
         run: |
-          docker stop test-container
-          docker rm test-container
+          docker stop rpi5-test
+          docker rm rpi5-test
