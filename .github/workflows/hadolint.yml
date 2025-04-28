@@ -51,3 +51,46 @@ jobs:
         with:
           sarif_file: hadolint-results.sarif
           wait-for-processing: true
+
+       # Build the Docker image
+      - name: Build Docker image
+        run: docker build --build-arg ZSH=y -t rpi5 ./src
+
+      # Run Docker container
+      - name: Run Docker container
+        run: |
+          docker run -d --name rpi5-test -p 2222:22 rpi5
+
+      # Wait for SSH
+      - name: Wait for SSH
+        rin: |
+          for i in {1..10}; do
+            if nc -z localhost 2222; then
+              echo "SSH is ready!"
+              exit 0
+            fi
+            echo "Waiting for SSH..."
+            sleep 2
+          done
+          echo "SSH failed to start." && exit 1
+
+
+      - name: Test SSH connection
+        run: |
+          sshpass -p "pass" ssh .o StrictHostKeyChecking=no user@localhost -p 2222 << EOF
+          echo "Connected over SSH!"
+          picotool --help || (echo "picotool not available" && exit 1)
+          EOF
+      - name: Verify oh-my-zsh installation
+        run: |
+          sshpass -p "pass" ssh -o StrictHostKeyChecking=no user@localhost -p 2222 <<EOF
+          if [ -f "\$HOME/.oh-my-zsh/tools/upgrade.sh" ]; then
+            echo "oh-my-zsh is installed! Running upgrade.sh to confirm functionality..."
+            bash \$HOME/.oh-my-zsh/tools/upgrade.sh || (echo "oh-my-zsh upgrade failed!" && exit 1)
+            echo "oh-my-zsh is properly installed and functional!";
+          else
+            echo "oh-my-zsh is not installed!" && exit 1;
+          fi
+          EOF
+
+            
