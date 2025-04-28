@@ -72,7 +72,7 @@ jobs:
       # Wait for SSH
       - name: Wait for SSH
         run: |
-          for i in {1..10}; do
+          for i in {1..20}; do
             if nc -z localhost 2222; then
               echo "SSH is ready!"
               exit 0
