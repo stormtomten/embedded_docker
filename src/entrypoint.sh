@@ -5,5 +5,4 @@ set -e
 mkdir -p /var/run/sshd
 
 # Start SSHD in the foreground
-exec /usr/sbin/sshd -D
-
+exec "$@"

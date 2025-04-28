@@ -7,7 +7,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Variable for zsh install
 ARG ZSH=n
 
-# Install pakages
+# Install packages
 RUN APT_PACKAGES=( \
     locales \
     build-essential \
@@ -57,10 +57,10 @@ RUN mkdir /var/run/sshd && \
 # Installing pico-sdk VERSION 2.1.1
 RUN rm -rf /opt/pico-sdk && \
     git clone https://github.com/raspberrypi/pico-sdk.git /opt/pico-sdk
-WORKDIR /opt/pico-sdk && \
+WORKDIR /opt/pico-sdk 
 RUN git checkout 2.1.1 && \
     git submodule update --init --recursive && \
-    rm -f /etc/profile.d/piko-sdk.sh && \
+    rm -f /etc/profile.d/pico-sdk.sh && \
     echo 'export PICO_SDK_PATH=/opt/pico-sdk' > /etc/profile.d/pico-sdk.sh
 
 # Installing picotool 
@@ -100,7 +100,7 @@ EXPOSE 22
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:22 || exit 1
+  CMD nc -z localhost 22 || exit 1
 
 # Copy en set entrypoint script
 COPY entrypoint.sh /entrypoint.sh
