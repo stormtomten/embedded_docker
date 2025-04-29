@@ -61,6 +61,18 @@ jobs:
 
       - name: Build Docker image
         run: docker buildx build --platform linux/arm64 --build-arg ZSH=y -t rpi5 --load ./src
+        
+      - name: Monitor System Resources
+        run: |
+          echo "=== Monitoring system resources ==="
+          for i in {1..20}; do
+            echo "Memory Usage:"
+            free -m
+            echo "CPU Usage:"
+            top -b -n1 | grep "Cpu(s)"
+            sleep 10
+          done
+
 
       - name: Docker network
         run: |
