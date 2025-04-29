@@ -33,5 +33,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: rpi5-docker-image
-          path: |
-            ./src
+          path: rpi5.tar

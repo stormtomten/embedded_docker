@@ -21,7 +21,7 @@ jobs:
 
       - name: Load Docker image
         run: |
-          docker load < ./src
+          docker load < rpi5.tar
 
       - name: Docker network
         run: |
