@@ -1,40 +1,40 @@
-name: Build Docker Image
+  name: Build Docker Image
 
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+  on:
+    push:
+      branches: [ main, develop ]
+    pull_request:
+      branches: [ main ]
 
-permissions:
-  contents: read
+  permissions:
+    contents: read
 
-jobs:
-  build:
-    name: Build Docker Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  jobs:
+    build:
+      name: Build Docker Image
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-        with:
-          platforms: linux/arm64
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+          with:
+            platforms: linux/arm64
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker image
-        run: |
-          docker buildx build --platform linux/arm64 --build-arg ZSH=y -t rpi5 --load ./src
+        - name: Build Docker image
+          run: |
+            docker buildx build --platform linux/arm64 --build-arg ZSH=y -t rpi5 --load ./src
 
-      - name: Save Docker image as tarball
-        run: |
-          docker save -o rpi5.tar rpi5
+        - name: Save Docker image as tarball
+          run: |
+            docker save -o rpi5.tar rpi5
 
-      - name: Save Docker image as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: rpi5-docker-image
-          path: rpi5.tar
+        - name: Save Docker image as artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: rpi5-docker-image
+            path: rpi5.tar
