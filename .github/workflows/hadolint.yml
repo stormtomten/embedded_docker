@@ -69,6 +69,11 @@ jobs:
         run: |
           docker run -d --name rpi5-test -p 2222:22 rpi5
 
+      - name: Start SSH server
+        run: |
+          sudo service ssh start
+          sudo netstat -tuln | grep 2222 || (echo "Port 2222 is not open" && exit 1)
+
       # Wait for SSH
       - name: Wait for SSH
         run: |
