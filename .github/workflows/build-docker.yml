@@ -31,7 +31,7 @@ jobs:
 
       - name: Save Docker image as tarball
         run: |
-          docker save rpi5 > rpit.tar
+          docker save -o rpi5.tar rpi5
 
       - name: Save Docker image as artifact
         uses: actions/upload-artifact@v4
