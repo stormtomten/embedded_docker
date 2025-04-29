@@ -1,0 +1,69 @@
+name: Test Docker Container
+
+on:
+  workflow_run:
+    workflows: ["Build Docker Image"]
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Run and Test Docker Container
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rpi5-docker-image
+
+      - name: Load Docker image
+        run: |
+          docker load < ./src
+
+      - name: Docker network
+        run: |
+          docker network create --driver bridge --subnet 192.168.2.0/24 --gateway 192.168.2.1 net
+
+      - name: Run Docker container
+        run: |
+          docker run -d --name rpi5-test --network net -p 2222:22 rpi5
+
+      - name: Wait for SSH
+        run: |
+          for i in {1..20}; do
+            if nc -z localhost 2222; then
+              echo "SSH is ready!"
+              exit 0
+            fi
+            echo "Waiting for SSH..."
+            sleep 2
+          done
+          echo "SSH failed to start." && exit 1
+
+      - name: Test SSH connection
+        run: |
+          sshpass -p "pass" ssh -tt -o StrictHostKeyChecking=no user@localhost -p 2222 << EOF
+          echo "Connected over SSH!"
+          picotool --help || (echo "picotool not available" && exit 1)
+          EOF
+          echo "SSH test passed!"
+
+      - name: Verify oh-my-zsh installation
+        run: |
+          sshpass -p "pass" ssh -o StrictHostKeyChecking=no user@localhost -p 2222 <<EOF
+          if [ -f "\$HOME/.oh-my-zsh/tools/upgrade.sh" ]; then
+            echo "oh-my-zsh is installed! Running upgrade.sh to confirm functionality..."
+            bash \$HOME/.oh-my-zsh/tools/upgrade.sh || (echo "oh-my-zsh upgrade failed!" && exit 1)
+            echo "oh-my-zsh is properly installed and functional!";
+          else
+            echo "oh-my-zsh is not installed!" && exit 1;
+          fi
+          EOF
+
+      - name: Cleanup
+        run: |
+          docker stop rpi5-test
+          docker rm rpi5-test
