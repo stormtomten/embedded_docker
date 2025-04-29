@@ -101,11 +101,19 @@ RUN su - ${USERNAME} -c 'mkdir -p /home/${USERNAME}/ws /home/${USERNAME}/share &
     fi'
 
 # Expose SSH port
-EXPOSE 22
+#EXPOSE 22
 
 # Healthcheck
+#HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+#  CMD nc -z localhost 22 || exit 1
+# Configure SSH to use a different port
+RUN echo "Port 2222" >> /etc/ssh/sshd_config
+EXPOSE 2222
+
+# Healthcheck for port 2222
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD nc -z localhost 22 || exit 1
+  CMD nc -z localhost 2222 || exit 1
+
 
 # Copy en set entrypoint script
 COPY entrypoint.sh /entrypoint.sh
