@@ -56,13 +56,13 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
-          platforms: linux/arm/v7
+          platforms: linux/arm64
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Build Docker image
-        run: docker buildx build --platform linux/arm/v7 --build-arg ZSH=y -t rpi5 --load ./src
+        run: docker buildx build --platform linux/arm64 --build-arg ZSH=y -t rpi5 --load ./src
 
       # Run Docker container
       - name: Run Docker container
