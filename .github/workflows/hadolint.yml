@@ -76,10 +76,16 @@ jobs:
       - name: Start SSH server
         run: |
           sudo service ssh start
-          sudo service ssh status
+          sudo service ssh status || (echo "SSH service failed to start" && exit 1)
           sudo netstat -tuln | grep 2222 || (echo "Port 2222 is not open" && exit 1)
 
-      # Wait for SSH
+      - name: Dump container logs for SSH
+        run: |
+          echo "=== Dumping SSH logs ==="
+          docker logs rpi5-test || echo "Could not fetch logs"
+        
+        
+        # Wait for SSH
       - name: Wait for SSH
         run: |
           for i in {1..20}; do
