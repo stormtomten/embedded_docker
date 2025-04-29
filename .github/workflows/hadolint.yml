@@ -86,7 +86,7 @@ jobs:
           echo "=== Dumping SSH logs ==="
           docker logs rpi5-test > docker_logs.txt || echo "Could not fetch logs"
 
-      - name: Upload SARIF file as artifact
+      - name: Upload logs
         uses: actions/upload-artifact@v4
         with:
           name: docker_logs
