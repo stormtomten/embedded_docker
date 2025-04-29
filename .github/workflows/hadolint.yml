@@ -75,7 +75,7 @@ jobs:
 
       - name: Start SSH server
         run: |
-          docker exec rpit-test service ssh start
+          docker exec rpi5-test service ssh start
           docker exec rpi5-test service ssh status
           docker exec rpi5-test netstat -tuln | grep 2222 || (echo "Port 2222 is not open" && exit 1)
 
