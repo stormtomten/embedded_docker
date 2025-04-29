@@ -64,10 +64,14 @@ jobs:
       - name: Build Docker image
         run: docker buildx build --platform linux/arm64 --build-arg ZSH=y -t rpi5 --load ./src
 
+      - name: Docker network
+        run: |
+          docker network create --driver bridge --subnet 192.168.2.0/24 --gateway 192.168.2.1 net
+
       # Run Docker container
       - name: Run Docker container
         run: |
-          docker run -d --name rpi5-test -p 2222:22 rpi5
+          docker run -d --name rpi5-test --network net -p 2222:22 rpi5
 
       - name: Start SSH server
         run: |
