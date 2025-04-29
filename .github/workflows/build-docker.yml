@@ -29,6 +29,10 @@ jobs:
         run: |
           docker buildx build --platform linux/arm64 --build-arg ZSH=y -t rpi5 --load ./src
 
+      - name: Save Docker image as tarball
+        run: |
+          docker save rpi5 > rpit.tar
+
       - name: Save Docker image as artifact
         uses: actions/upload-artifact@v4
         with:
