@@ -10,12 +10,10 @@ name: Hadolint
 
 on:
   push:
-    branches: [ main, develop]
+    branches: [ main, develop ]
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ main ]
-    # schedule:
-    #- cron: '*/60 * * * *'
 
 permissions:
   contents: read
@@ -77,7 +75,7 @@ jobs:
       - name: Start SSH server
         run: |
           docker exec rpi5-test mkdir -p /run/sshd
-          docker exec rpit-test service ssh start
+          docker exec rpi5-test service ssh start
           docker exec rpi5-test service ssh status
           docker exec rpi5-test netstat -tuln | grep 2222 || (echo "Port 2222 is not open" && exit 1)
 
@@ -91,9 +89,8 @@ jobs:
         with:
           name: docker_logs
           path: docker_logs.txt
-        
-        
-        # Wait for SSH
+
+      # Wait for SSH
       - name: Wait for SSH
         run: |
           for i in {1..20}; do
@@ -105,7 +102,6 @@ jobs:
             sleep 2
           done
           echo "SSH failed to start." && exit 1
-
 
       - name: Test SSH connection
         run: |
@@ -126,7 +122,6 @@ jobs:
         run: |
           echo "=== SSH server logs from container ==="
           docker logs rpi5-test || echo "Could not fetch logs!"
-
 
       - name: Verify oh-my-zsh installation
         run: |
