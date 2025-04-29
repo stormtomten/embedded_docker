@@ -50,9 +50,9 @@ ENV LC_ALL=sv_SE.UTF-8
 RUN locale
     
 # Create the SSH run directory and configure SSH settings (password but no root)
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
+RUN mkdir -p /var/run/sshd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
-    mkdir -p /var/run/sshd && \
     ssh-keygen -A
 
 # Installing pico-sdk VERSION 2.1.1
