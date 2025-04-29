@@ -56,7 +56,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
-          platforms: linux/arm64, linux/arm/v7
+          platforms: linux/arm/v7
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -72,6 +72,7 @@ jobs:
       - name: Start SSH server
         run: |
           sudo service ssh start
+          sudo service ssh status
           sudo netstat -tuln | grep 2222 || (echo "Port 2222 is not open" && exit 1)
 
       # Wait for SSH
