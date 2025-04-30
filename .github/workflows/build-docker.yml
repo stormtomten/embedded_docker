@@ -1,10 +1,10 @@
   name: Build Docker Image
 
   on:
-    push:
-      branches: [ main, develop ]
-    pull_request:
-      branches: [ main ]
+    workflow_run:
+      workflows: ["Hadolint"]
+      types:
+        - completed
 
   permissions:
     contents: read
