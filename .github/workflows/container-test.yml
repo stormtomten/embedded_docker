@@ -20,19 +20,19 @@
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts
 
-        - name: Download Docker image artifact from previous workflow
+        - name: download docker image artifact from previous workflow
           env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            RUN_ID: ${{ github.event.workflow_run.id }}
+            github_token: ${{ secrets.github_token }}
+            run_id: ${{ github.event.workflow_run.id }}
           run: |
-            echo "Fetching artifact metadata..."
-            ARTIFACT_URL=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-              https://api.github.com/repos/${{ github.repository }}/actions/runs/$RUN_ID/artifacts \
+            echo "fetching artifact metadata..."
+            artifact_url=$(curl -s -h "authorization: bearer $github_token" \
+              https://api.github.com/repos/${{ github.repository }}/actions/runs/$run_id/artifacts \
               | jq -r '.artifacts[] | select(.name == "rpi5-docker-image") | .archive_download_url')
 
-            echo "Downloading artifact from $ARTIFACT_URL"
-            curl -L -H "Authorization: Bearer $GITHUB_TOKEN" \
-              -o artifact.zip "$ARTIFACT_URL"
+            echo "downloading artifact from $artifact_url"
+            curl -l -h "authorization: bearer $github_token" \
+              -o artifact.zip "$artifact_url"
 
             unzip artifact.zip
 
@@ -48,6 +48,10 @@
         - name: Run Docker container
           run: |
             docker run -d --name rpi5-test --network net -p 2222:22 rpi5
+            
+        - name: Start SSH service
+          run: |
+            docker exec rpi5-test service ssh start
 
         - name: Wait for SSH
           run: |
